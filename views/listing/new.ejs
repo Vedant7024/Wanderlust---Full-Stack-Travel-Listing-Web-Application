@@ -1,20 +1,43 @@
 <% layout("layout/boilerplate") %>
 <body>
-     <h2>Adding New List</h2>
-    <form action="/listings" method="POST">
-        <input type="text", name=listing[title] placeholder="Enter Title">
-        <br> <br>
-         <textarea type="text", name=listing[description] placeholder="Enter description"></textarea>
-        <br><br>
-         <input type="number", name=listing[price] placeholder="Enter price">
-        <br><br>
-         <input type="text", name=listing[image] placeholder="Enter image URL">
-        <br><br>
-         <input type="text", name=listing[location] placeholder="Enter location">
-        <br><br>
-         <input type="text", name=listing[country] placeholder="Enter counter">
-        <br><br>
-        <button>Add</button>
 
+     <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <h2>Create New List</h2>
+    <form action="/listings" method="POST">
+        <div class="mb-3">
+            <label for="title"  class="form-lable">Title</label>
+            <input type="text", name=listing[title] placeholder="Add a catchy title" class="form-control">
+        </div>
+        <div class="mb-3">
+             <label for="discription"  class="form-lable">Discription</label>
+             <textarea type="text", name=listing[description] placeholder="Enter description" class="form-control"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="mb-3 col-md-4">
+            <label for="price"  class="form-lable">Price</label>
+            <input type="number", name=listing[price] placeholder="1200" class="form-control">
+            </div>
+
+            <div class="mb-3 col-md-8" >
+            <label for="country"  class="form-lable">Country</label>
+            <input type="text", name=listing[country] placeholder="India" class="form-control">
+            </div>
+        </div>
+        
+
+        <div class="mb-3">
+            <label for="image"  class="form-lable">Image Link</label>
+             <input type="text", name=listing[image] placeholder="Enter image URL" class="form-control">
+        </div>
+        
+        <div class="mb-3">
+            <label for="location"  class="form-lable">Location</label>
+            <input type="text", name=listing[location] placeholder="Rajasthan, Gujrat " class="form-control">
+        </div>
+        <button class="btn btn-dark add-btn mt-3">Add</button>
     </form>
+    </div>
+    </div>
 </body>
