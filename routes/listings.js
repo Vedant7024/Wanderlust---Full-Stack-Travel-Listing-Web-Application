@@ -33,7 +33,7 @@ router.post("/", validationMiddleware, wrapAsync(async (req,res,next) => {
 
 
 // index route
-router.get("/listings", wrapAsync(async (req,res,next) => {
+router.get("/", wrapAsync(async (req,res,next) => {
     let allListing = await Listing.find({});
     res.render("listing/index.ejs", {allListing});
 }));
