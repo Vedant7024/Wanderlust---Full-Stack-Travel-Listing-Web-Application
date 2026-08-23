@@ -38,10 +38,6 @@ main().then((res) => {
 
 
 
-app.get("/boil", (req, res) => {
-    res.render("listing/boil.ejs");
-});
-
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", review);
 
