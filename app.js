@@ -10,8 +10,9 @@ const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 const { reviewsSchema } = require("./schema.js");
-const listings = require("./routes/listings.js");
-const review = require("./routes/review.js");
+const listingRouter = require("./routes/listings.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
@@ -67,11 +68,27 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 });
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", review);
+
+
+// this is onlt for testing purpose to create a new user in the database. You can remove this code after testing.
+
+// app.get("/demouser", async (req, res) => {
+//     let fakeuser = new User({
+//         email: "Vedant192005@gmail.com",
+//         username: "Vedant",
+//     })
+
+//     let registeredUser = await User.register(fakeuser, "Vedant@192005");
+//     res.send(registeredUser);
+// });
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 
 // app.get("/testlisting",async (req,res) => {
