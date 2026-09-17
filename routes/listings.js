@@ -1,85 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const { listingSchema } = require("../schema.js");
-const ExpressError = require("../utils/ExpressError.js");
-const Listing = require("../models/listing.js");
-const { isLoggedIn } = require("../middileware.js");
+const { isLoggedIn, isOwner, validationMiddleware } = require("../middileware.js");
+const listingController = require("../controllers/listings.js");
 
 
 
-const validationMiddleware = (req,res,next) => {
-    let {error} = listingSchema.validate(req.body);
-    if(error){
-        let errmsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(errmsg, 400)
-    } else {
-        next();
-    }
-};
+//Router.route() is used to create chainable route handlers for a route path. It is a way to modularize the routes and make the code more organized. In this case, it is used to define the routes for the listings resource.
+
+router.route("/")
+// index route
+.get(wrapAsync(listingController.index))
+// Create Route
+.post(isLoggedIn, validationMiddleware, wrapAsync(listingController.renderCreateForm));
 
 //New Route
-
-router.get("/new", isLoggedIn, (req,res) => {
-    res.render("listing/new.ejs");
-});
-
-// Create Route
-
-router.post("/", isLoggedIn,  validationMiddleware, wrapAsync(async (req,res,next) => {
-        const newListing = new Listing(req.body.listing);
-         await newListing.save();
-         req.flash("success", "New Listings Created");
-        res.redirect("/listings");
-}));
+router.get("/new", isLoggedIn, listingController.renderNewForm); 
 
 
-// index route
-router.get("/", wrapAsync(async (req,res,next) => {
-    let allListing = await Listing.find({});
-    res.render("listing/index.ejs", {allListing});
-}));
+router.route("/:id")
+//Show route
+.get(wrapAsync(listingController.renderShowPage))
+//Update Route
+.put( isLoggedIn, isOwner,  validationMiddleware, wrapAsync(listingController.renderUpdateForm))
+//DELETE Route
+.delete(isLoggedIn, isOwner, wrapAsync(listingController.renderDeleteForm));
 
-
-// show route
-router.get("/:id",wrapAsync(async (req,res) => {
-    let {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
-    if(!listing){
-        req.flash("error", "Listing not found");
-        return res.redirect("/listings");
-    }
-    res.render("listing/show.ejs", {listing});
-}));
 
 //Edit Route
-router.get("/:id/edit", isLoggedIn,  wrapAsync(async (req,res) => {
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-    if(!listing){
-        req.flash("error", "Listing you want to edit does not exist");
-        return res.redirect("/listings");
-    }
-    res.render("listing/edit.ejs" , {listing});
-})); 
-
-
-//Update Route
-
-router.put("/:id" , isLoggedIn,  validationMiddleware, wrapAsync(async(req,res) => {
-    let {id} = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing}); 
-    req.flash("success", "Listing Updated");
-    res.redirect(`/listings/${id}`);
-}));
-
-// DELETE Route
-
-router.delete("/:id", isLoggedIn,  wrapAsync(async (req,res) => {
-    let {id} = req.params;
-    await Listing.findByIdAndDelete(id);
-    req.flash("success", "Listing Deleted ");
-    res.redirect("/listings");
-}));
+router.get("/:id/edit", isLoggedIn, isOwner,  wrapAsync(listingController.renderEditForm)); 
 
 module.exports = router;
