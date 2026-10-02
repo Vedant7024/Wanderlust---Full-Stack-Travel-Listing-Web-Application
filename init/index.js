@@ -37,7 +37,8 @@ const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.ATLASDB_URL;
 
 const geocodingClient = mbxGeocoding({
     accessToken: process.env.MAP_TOKEN
@@ -79,7 +80,7 @@ const initDB = async () => {
             // Add geometry to the listing
             const listing = {
                 ...obj,
-                owner: "6aa6149410b6f2657121be19",
+                owner: "6abde9a14b75ddf29de1a9f8",
                 geometry: response.body.features[0].geometry
             };
 
