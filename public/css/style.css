@@ -2989,3 +2989,45 @@ select {
         min-height: 130px;
     }
 }
+
+/* -------------------------------------------------------------------------------------------- */
+
+/* =========================================================
+   SHOW PAGE - IMAGE LEFT / INFO RIGHT
+   ONLY POSITION UPDATED
+   ========================================================= */
+
+@media (min-width: 768px) {
+
+    .show-main-row {
+        display: grid;
+    }
+
+    /* Image on LEFT */
+    .show-media {
+        order: 1;
+    }
+
+    /* Listing information on RIGHT */
+    .show-details {
+        order: 2;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE - KEEP CURRENT STACKING
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .show-details {
+        order: 1;
+    }
+
+    .show-media {
+        order: 2;
+    }
+
+}
